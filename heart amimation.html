@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Romantic Love Animation</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #0b1026, #1b1f4a, #2d1b55);
+    position: relative;
+  }
+
+  .container {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    animation: floatBox 3s ease-in-out infinite;
+  }
+
+  @keyframes floatBox {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .char {
+    font-size: 60px;
+    margin-bottom: 10px;
+    animation: bounce 1.5s infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .heart {
+    display: grid;
+    grid-template-columns: repeat(9, 34px);
+    gap: 4px;
+    justify-content: center;
+    margin: 10px 0 25px;
+    filter: drop-shadow(0 0 12px rgba(255, 0, 76, 0.6));
+  }
+
+  .heart span {
+    font-size: 24px;
+    opacity: 0;
+    transform: scale(0);
+    animation: pop 0.6s forwards;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0); opacity: 0; }
+    80% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 48px;
+    color: white;
+    text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px #ff4d6d;
+    opacity: 0;
+    animation: fadeIn 2s ease forwards;
+    animation-delay: 1.8s;
+  }
+
+  p {
+    color: white;
+    font-size: 20px;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 2s ease forwards;
+    animation-delay: 2.5s;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .floating-heart {
+    position: absolute;
+    color: #ff1744;
+    font-size: 24px;
+    pointer-events: none;
+    animation: rise linear forwards;
+    text-shadow: 0 0 10px rgba(255,0,0,0.5);
+  }
+
+  @keyframes rise {
+    0%   { transform: translateY(0) scale(0.8);   opacity: 1; }
+    100% { transform: translateY(-250px) scale(1.5); opacity: 0; }
+  }
+
+  .glow {
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1);   opacity: 0.8; }
+    50%      { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* ── Button row ── */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .surprise-btn, .letter-btn {
+    border: none;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: transform 0.25s ease;
+  }
+
+  .surprise-btn { background: white; color: #e91e63; }
+  .letter-btn   { background: linear-gradient(135deg, #ff6b9d, #c44bdb); color: white; }
+  .surprise-btn:hover, .letter-btn:hover { transform: scale(1.08); }
+
+  .surprise-box {
+    max-height: 0;
+    overflow: hidden;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    transition: all 0.6s ease;
+    opacity: 0;
+    margin-bottom: 10px;
+  }
+
+  .surprise-box.show {
+    max-height: 100px;
+    opacity: 1;
+    margin-bottom: 20px;
+    transform: scale(1.05);
+  }
+
+  .moon {
+    position: absolute;
+    top: 60px; right: 80px;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: #fff8dc;
+    box-shadow: 0 0 30px rgba(255,248,220,0.8);
+    z-index: 0;
+  }
+
+  .stars { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+
+  .star {
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 8px rgba(255,255,255,0.9);
+    animation: twinkle 2s infinite ease-in-out;
+  }
+
+  @keyframes twinkle {
+    0%,100% { opacity: 0.3; transform: scale(1);   }
+    50%      { opacity: 1;   transform: scale(1.8); }
+  }
+
+  /* ── Shooting Stars ── */
+  .shooting-star {
+    position: absolute;
+    top: 0; left: 0;
+    width: 120px; height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,220,240,0.8) 100%);
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: right center;
+    z-index: 1;
+  }
+
+  .shooting-star::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 8px 3px rgba(255,200,230,0.9);
+  }
+
+  /* ══════════════════════════════════
+     LOVE LETTER POPUP
+  ══════════════════════════════════ */
+  .letter-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5,5,25,0.78);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    animation: overlayIn 0.35s ease;
+  }
+
+  .letter-overlay.open { display: flex; }
+
+  @keyframes overlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* The parchment paper */
+  .letter-paper {
+    position: relative;
+    width: min(540px, 92vw);
+    background: #fffdf5;
+    border-radius: 6px;
+    padding: 52px 44px 36px;
+    box-shadow:
+      0 0 0 1px rgba(200,160,110,0.35),
+      0 32px 90px rgba(0,0,0,0.6),
+      0 0 70px rgba(255,100,160,0.12);
+    animation: paperDrop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  @keyframes paperDrop {
+    from { transform: translateY(-60px) scale(0.88); opacity: 0; }
+    to   { transform: translateY(0)     scale(1);    opacity: 1; }
+  }
+
+  /* Gradient top bar */
+  .letter-paper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    border-radius: 6px 6px 0 0;
+    background: linear-gradient(90deg, #ff6b9d, #c44bdb, #ff6b9d);
+  }
+
+  /* Wax seal */
+  .letter-seal {
+    position: absolute;
+    top: -24px; left: 50%;
+    transform: translateX(-50%);
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ff85b3, #b030cc);
+    box-shadow: 0 4px 16px rgba(180,50,140,0.55);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    z-index: 10;
+    animation: sealBob 3s ease-in-out infinite;
+  }
+
+  @keyframes sealBob {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(-4px); }
+  }
+
+  /* Close */
+  .letter-close {
+    position: absolute;
+    top: 14px; right: 16px;
+    background: none; border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #c44bdb;
+    transition: transform 0.2s;
+    line-height: 1;
+    z-index: 20;
+  }
+
+  .letter-close:hover { transform: scale(1.3) rotate(15deg); }
+
+  /* Ruled lines */
+  .letter-lines {
+    position: absolute;
+    inset: 80px 0 0 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .letter-line {
+    position: absolute;
+    left: 44px; right: 44px;
+    height: 1px;
+    background: rgba(200,170,185,0.22);
+  }
+
+  /* Greeting */
+  .letter-greeting {
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    color: #b05090;
+    margin: 6px 0 18px;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    position: relative;
+    z-index: 1;
+    min-height: 22px;
+  }
+
+  /* Typed body */
+  .letter-body {
+    font-family: 'Georgia', serif;
+    font-size: 16.5px;
+    line-height: 1.9;
+    color: #3a2535;
+    min-height: 200px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Blinking cursor */
+  .cursor {
+    display: inline-block;
+    width: 2px; height: 1.1em;
+    background: #c44bdb;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.75s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0; }
+  }
+
+  /* Progress bar */
+  .letter-progress-wrap {
+    margin: 18px 0 0;
+    height: 3px;
+    border-radius: 999px;
+    background: rgba(196,75,219,0.12);
+    overflow: hidden;
+    position: relative; z-index: 1;
+  }
+
+  .letter-progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ff6b9d, #c44bdb);
+    width: 0%;
+    transition: width 0.12s linear;
+  }
+
+  /* Signature */
+  .letter-signature {
+    margin-top: 26px;
+    text-align: right;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    color: #9a3078;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 1s ease;
+    position: relative; z-index: 1;
+  }
+
+  .letter-signature.show { opacity: 1; }
+
+  /* Action buttons */
+  .letter-actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+
+  .letter-actions.show { opacity: 1; }
+
+  .letter-action-btn {
+    border: none;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .btn-replay { background: linear-gradient(135deg, #ff6b9d, #c44bdb); color: white; }
+  .btn-page   { background: #fff0f8; color: #c44bdb; border: 1px solid #e8b0d8; }
+  .letter-action-btn:hover { transform: scale(1.07); }
+
+  /* Page dots */
+  .page-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 14px;
+    opacity: 0;
+    transition: opacity 0.6s;
+    position: relative; z-index: 1;
+  }
+
+  .page-dots.show { opacity: 1; }
+
+  .page-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #e8b0d8;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .page-dot.active { background: #c44bdb; transform: scale(1.4); }
+
+  /* Hint text */
+  .letter-hint {
+    font-size: 11px;
+    color: #c0a0c0;
+    text-align: center;
+    margin-top: 8px;
+    font-style: italic;
+    position: relative; z-index: 1;
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+
+  .letter-hint.show { opacity: 1; }
+
+  /* Decorative petals */
+  .petal {
+    position: absolute;
+    font-size: 15px;
+    opacity: 0.16;
+    pointer-events: none;
+    animation: petalSway 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes petalSway {
+    from { transform: rotate(-8deg); }
+    to   { transform: rotate(12deg); }
+  }
+</style>
+</head>
+<body>
+  <div class="moon"></div>
+  <div class="stars" id="stars"></div>
+  <div class="glow"></div>
+
+  <div class="container">
+    <div class="btn-row">
+      <button class="surprise-btn" id="surpriseBtn">💝 Open My Heart</button>
+      <button class="letter-btn"   id="letterBtn">💌 Read My Letter</button>
+    </div>
+    <div class="surprise-box" id="surpriseBox">💖 You are my sweetest happiness 💖</div>
+    <div class="char">🥰👉❤️</div>
+    <div class="heart" id="heart"></div>
+    <h1>I Love You 💖</h1>
+    <p>Forever & Always ✨</p>
+  </div>
+
+  <!-- Love Letter Popup -->
+  <div class="letter-overlay" id="letterOverlay">
+    <div class="letter-paper" id="letterPaper">
+      <div class="letter-lines"  id="letterLines"></div>
+      <div class="letter-seal">💌</div>
+      <button class="letter-close" id="letterClose">✕</button>
+      <div class="letter-greeting" id="letterGreeting"></div>
+      <div class="letter-body"     id="letterBody"><span class="cursor"></span></div>
+      <div class="letter-progress-wrap">
+        <div class="letter-progress-bar" id="letterProgress"></div>
+      </div>
+      <div class="letter-signature" id="letterSignature">— Yours, always 💜</div>
+      <div class="letter-actions"   id="letterActions">
+        <button class="letter-action-btn btn-replay" id="replayBtn">↺ Read Again</button>
+        <button class="letter-action-btn btn-page"   id="nextPageBtn">Next Page ›</button>
+      </div>
+      <div class="page-dots" id="pageDots"></div>
+      <div class="letter-hint" id="letterHint">Tap the letter to skip typing</div>
+    </div>
+  </div>
+
+<script>
+  /* ── Heart ── */
+  const heartShape = [
+    '001111100','011111110','111111111',
+    '111111111','011111110','001111100',
+    '000111000','000010000'
+  ];
+  const heartContainer = document.getElementById('heart');
+  heartShape.forEach((row, r) => {
+    row.split('').forEach((col, c) => {
+      const span = document.createElement('span');
+      span.innerHTML = col === '1' ? '❤️' : '';
+      span.style.animationDelay = (r + c) * 0.08 + 's';
+      heartContainer.appendChild(span);
+    });
+  });
+
+  /* ── Floating hearts ── */
+  function createFloatingHeart() {
+    const h = document.createElement('div');
+    h.className = 'floating-heart';
+    h.innerHTML = Math.random() > 0.5 ? '❤️' : '💖';
+    h.style.left = Math.random() * window.innerWidth + 'px';
+    h.style.top  = window.innerHeight - 50 + 'px';
+    h.style.animationDuration = (2 + Math.random() * 2) + 's';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 4000);
+  }
+  setInterval(createFloatingHeart, 180);
+
+  /* ── Surprise btn ── */
+  document.getElementById('surpriseBtn').addEventListener('click', () => {
+    document.getElementById('surpriseBox').classList.toggle('show');
+    for (let i = 0; i < 12; i++) setTimeout(createFloatingHeart, i * 120);
+  });
+
+  /* ── Stars ── */
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random() * window.innerWidth + 'px';
+    s.style.top  = Math.random() * window.innerHeight + 'px';
+    s.style.animationDelay = Math.random() * 2 + 's';
+    starsEl.appendChild(s);
+  }
+
+  /* ── Shooting stars ── */
+  function createShootingStar() {
+    const el = document.createElement('div');
+    el.className = 'shooting-star';
+    const startX   = Math.random() * window.innerWidth  * 0.75;
+    const startY   = Math.random() * window.innerHeight * 0.45;
+    const angleDeg = 30 + Math.random() * 30;
+    const dist     = 180 + Math.random() * 220;
+    const duration = 700 + Math.random() * 800;
+    el.style.left = startX + 'px';
+    el.style.top  = startY + 'px';
+    document.body.appendChild(el);
+    el.animate([
+      { transform: `rotate(${angleDeg}deg) translateX(0px)`,           opacity: 0 },
+      { transform: `rotate(${angleDeg}deg) translateX(${dist*.05}px)`, opacity: 1, offset: 0.05 },
+      { transform: `rotate(${angleDeg}deg) translateX(${dist*.85}px)`, opacity: 1, offset: 0.85 },
+      { transform: `rotate(${angleDeg}deg) translateX(${dist}px)`,     opacity: 0 }
+    ], { duration, easing: 'ease-in', fill: 'forwards' }).onfinish = () => el.remove();
+  }
+  function scheduleStar() {
+    createShootingStar();
+    setTimeout(scheduleStar, 1200 + Math.random() * 1600);
+  }
+  setTimeout(scheduleStar,        600);
+  setTimeout(createShootingStar, 1400);
+  setTimeout(createShootingStar, 2200);
+
+  /* ── Audio ── */
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioContextClass();
+  function playTone(freq, start, dur) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(0.08, start + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(start); osc.stop(start + dur);
+  }
+  function playRomanticMelody() {
+    const now = audioCtx.currentTime;
+    [523.25,659.25,783.99,659.25,698.46,659.25,523.25]
+      .forEach((n,i) => playTone(n, now + i*0.45, 0.4));
+  }
+  document.body.addEventListener('click', () => {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    playRomanticMelody();
+    setInterval(playRomanticMelody, 3500);
+  }, { once: true });
+
+  /* ══════════════════════════════════════════
+     TYPEWRITER LOVE LETTER
+  ══════════════════════════════════════════ */
+
+  const PAGES = [
+    {
+      greeting: 'My Dearest Love,',
+      body:
+`Every single morning I wake up,
+my first thought is you. 💗
+
+The way you laugh at your own jokes,
+the warmth in your eyes when you smile —
+it makes the whole world feel softer,
+like someone turned the volume of life up
+just enough.
+
+I never knew a person could feel like home
+until I found you.`
+    },
+    {
+      greeting: 'And if I could tell the stars...',
+      body:
+`I would ask them to count the reasons
+I love you — but there aren't enough stars
+in the sky for that. 🌟
+
+You are the quiet at the end of a long day.
+You are the song I didn't know I was missing.
+You are every answered wish I never spoke aloud.
+
+Thank you for existing in my universe.
+Thank you for letting me exist in yours.`
+    },
+    {
+      greeting: 'Forever is not long enough...',
+      body:
+`If I had a thousand lifetimes,
+I would choose you in every single one. ♾️
+
+No distance is too far,
+no storm too wild,
+no silence too heavy —
+because on the other side of all of it,
+there is you.
+
+And that is more than enough.
+That is everything. 💖`
+    }
+  ];
+
+  let currentPage = 0;
+  let typeTimer   = null;
+  let isTyping    = false;
+  let typingDone  = false;
+
+  const overlay     = document.getElementById('letterOverlay');
+  const letterGreet = document.getElementById('letterGreeting');
+  const letterBody  = document.getElementById('letterBody');
+  const letterProg  = document.getElementById('letterProgress');
+  const letterSig   = document.getElementById('letterSignature');
+  const letterActs  = document.getElementById('letterActions');
+  const pageDots    = document.getElementById('pageDots');
+  const replayBtn   = document.getElementById('replayBtn');
+  const nextPageBtn = document.getElementById('nextPageBtn');
+  const letterClose = document.getElementById('letterClose');
+  const letterLines = document.getElementById('letterLines');
+  const letterHint  = document.getElementById('letterHint');
+  const letterPaper = document.getElementById('letterPaper');
+
+  /* Ruled lines */
+  for (let i = 0; i < 20; i++) {
+    const ln = document.createElement('div');
+    ln.className = 'letter-line';
+    ln.style.top = (i * 32) + 'px';
+    letterLines.appendChild(ln);
+  }
+
+  /* Decorative petals */
+  [
+    { top:'8%',  left:'5%'  },{ top:'11%', right:'7%' },
+    { top:'52%', left:'3%'  },{ top:'70%', right:'5%' },
+    { top:'88%', left:'12%' },{ top:'90%', right:'10%'}
+  ].forEach(pos => {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = '🌸';
+    Object.assign(p.style, pos);
+    p.style.animationDelay = Math.random() * 2 + 's';
+    letterPaper.appendChild(p);
+  });
+
+  /* Build page indicator dots */
+  function buildDots() {
+    pageDots.innerHTML = '';
+    PAGES.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'page-dot' + (i === currentPage ? ' active' : '');
+      pageDots.appendChild(d);
+    });
+    pageDots.classList.add('show');
+  }
+
+  /* Show all actions after typing finishes */
+  function showDoneState() {
+    const cur = letterBody.querySelector('.cursor');
+    if (cur) cur.style.display = 'none';
+    letterSig.classList.add('show');
+    letterActs.classList.add('show');
+    letterHint.classList.remove('show');
+    buildDots();
+    /* Update next page label */
+    nextPageBtn.textContent = currentPage < PAGES.length - 1
+      ? 'Next Page ›'
+      : '↩ First Page';
+    for (let i = 0; i < 8; i++) setTimeout(createFloatingHeart, i * 160);
+  }
+
+  /* Reset state */
+  function resetLetter() {
+    clearTimeout(typeTimer);
+    isTyping = false; typingDone = false;
+    letterBody.innerHTML = '<span class="cursor"></span>';
+    letterGreet.textContent = '';
+    letterProg.style.width = '0%';
+    letterSig.classList.remove('show');
+    letterActs.classList.remove('show');
+    letterHint.classList.remove('show');
+  }
+
+  /* Typewriter */
+  function typeLetter(page) {
+    resetLetter();
+    const { greeting, body } = PAGES[page];
+    const total = body.length;
+    let idx = 0;
+    isTyping = true;
+
+    setTimeout(() => { letterGreet.textContent = greeting; }, 250);
+    setTimeout(() => { letterHint.classList.add('show'); }, 800);
+
+    function typeNext() {
+      if (idx >= total) {
+        isTyping = false; typingDone = true;
+        setTimeout(showDoneState, 300);
+        return;
+      }
+      const char = body[idx++];
+      const cursor = letterBody.querySelector('.cursor');
+      letterBody.insertBefore(document.createTextNode(char), cursor);
+      letterProg.style.width = (idx / total * 100) + '%';
+
+      let delay = 25;
+      if (['.','!','?'].includes(char)) delay = 340;
+      else if (char === ',')            delay = 170;
+      else if (char === '\n')           delay = 210;
+      else if (char === ' ')            delay = 18;
+      else                              delay = 20 + Math.random() * 20;
+
+      typeTimer = setTimeout(typeNext, delay);
+    }
+    typeNext();
+  }
+
+  /* Skip to end */
+  function skipToEnd() {
+    if (!isTyping) return;
+    clearTimeout(typeTimer);
+    const { body } = PAGES[currentPage];
+    const cursor = letterBody.querySelector('.cursor');
+    while (letterBody.firstChild && letterBody.firstChild !== cursor)
+      letterBody.removeChild(letterBody.firstChild);
+    letterBody.insertBefore(document.createTextNode(body), cursor);
+    letterProg.style.width = '100%';
+    isTyping = false; typingDone = true;
+    showDoneState();
+  }
+
+  /* Open */
+  function openLetter() {
+    currentPage = 0;
+    overlay.classList.add('open');
+    typeLetter(0);
+    buildDots();
+    for (let i = 0; i < 10; i++) setTimeout(createFloatingHeart, i * 100);
+  }
+
+  /* Close */
+  function closeLetter() {
+    overlay.classList.remove('open');
+    clearTimeout(typeTimer);
+  }
+
+  /* Next page */
+  nextPageBtn.addEventListener('click', () => {
+    if (!typingDone) { skipToEnd(); return; }
+    currentPage = (currentPage + 1) % PAGES.length;
+    typeLetter(currentPage);
+    buildDots();
+  });
+
+  /* Replay */
+  replayBtn.addEventListener('click', () => typeLetter(currentPage));
+
+  /* Buttons */
+  document.getElementById('letterBtn').addEventListener('click', openLetter);
+  letterClose.addEventListener('click', closeLetter);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeLetter(); });
+
+  /* Click paper = skip typing */
+  letterPaper.addEventListener('click', e => {
+    if (letterClose.contains(e.target) || nextPageBtn.contains(e.target) || replayBtn.contains(e.target)) return;
+    if (isTyping) skipToEnd();
+  });
+</script>
+</body>
+</html>
